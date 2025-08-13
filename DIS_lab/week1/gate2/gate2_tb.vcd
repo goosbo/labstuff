@@ -1,0 +1,66 @@
+$date
+	Fri Jul 25 11:52:11 2025
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1ns
+$end
+$scope module gate2_tb $end
+$var wire 1 ! f $end
+$var reg 1 " a $end
+$var reg 1 # b $end
+$var reg 1 $ c $end
+$var reg 1 % d $end
+$scope module g2 $end
+$var wire 1 " a $end
+$var wire 1 # b $end
+$var wire 1 $ c $end
+$var wire 1 % d $end
+$var wire 1 ! f $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+#0
+$dumpvars
+0%
+0$
+0#
+0"
+0!
+$end
+#15
+1%
+#30
+0%
+1$
+#45
+1%
+#60
+0%
+0$
+1#
+#75
+1!
+1%
+#90
+0%
+1$
+#105
+1%
+#120
+0!
+0%
+0$
+0#
+1"
+#135
+1!
+1%
+#150
+0%
+1$
+#165
+1%
+#180
