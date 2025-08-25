@@ -1,0 +1,145 @@
+$date
+	Mon Aug 25 10:51:43 2025
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1ns
+$end
+$scope module testbench $end
+$var wire 4 ! s [3:0] $end
+$var wire 1 " cout $end
+$var reg 1 # control $end
+$var reg 4 $ x [3:0] $end
+$var reg 4 % y [3:0] $end
+$scope module b $end
+$var wire 1 # control $end
+$var wire 4 & x [3:0] $end
+$var wire 4 ' y [3:0] $end
+$var wire 4 ( y_xor [3:0] $end
+$var wire 4 ) s [3:0] $end
+$var wire 1 " cout $end
+$var wire 1 * c2 $end
+$var wire 1 + c1 $end
+$var wire 1 , c0 $end
+$scope module fa0 $end
+$var wire 1 # cin $end
+$var wire 1 , cout $end
+$var wire 1 - s $end
+$var wire 1 . x $end
+$var wire 1 / y $end
+$upscope $end
+$scope module fa1 $end
+$var wire 1 , cin $end
+$var wire 1 + cout $end
+$var wire 1 0 s $end
+$var wire 1 1 x $end
+$var wire 1 2 y $end
+$upscope $end
+$scope module fa2 $end
+$var wire 1 + cin $end
+$var wire 1 * cout $end
+$var wire 1 3 s $end
+$var wire 1 4 x $end
+$var wire 1 5 y $end
+$upscope $end
+$scope module fa3 $end
+$var wire 1 * cin $end
+$var wire 1 " cout $end
+$var wire 1 6 s $end
+$var wire 1 7 x $end
+$var wire 1 8 y $end
+$upscope $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+#0
+$dumpvars
+18
+17
+06
+05
+14
+13
+02
+11
+10
+1/
+0.
+1-
+0,
+0+
+0*
+b111 )
+b1001 (
+b1001 '
+b1110 &
+b1001 %
+b1110 $
+0#
+1"
+b111 !
+$end
+#20
+1*
+1+
+00
+1,
+0"
+0-
+03
+b1000 !
+b1000 )
+16
+15
+08
+b101 (
+1.
+04
+07
+b101 %
+b101 '
+b11 $
+b11 &
+#40
+0,
+00
+13
+06
+1"
+0/
+12
+0.
+14
+17
+b110 (
+b101 !
+b101 )
+1-
+b1001 %
+b1001 '
+b1110 $
+b1110 &
+1#
+#60
+0*
+10
+0-
+1,
+13
+b1110 !
+b1110 )
+16
+0"
+05
+18
+b1010 (
+1.
+04
+07
+b101 %
+b101 '
+b11 $
+b11 &
+#80

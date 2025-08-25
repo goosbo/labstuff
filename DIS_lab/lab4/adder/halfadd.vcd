@@ -1,0 +1,40 @@
+$date
+	Mon Aug 25 10:28:38 2025
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1ns
+$end
+$scope module testbench $end
+$var wire 1 ! s $end
+$var wire 1 " cout $end
+$var reg 1 # x $end
+$var reg 1 $ y $end
+$scope module h $end
+$var wire 1 " cout $end
+$var wire 1 ! s $end
+$var wire 1 # x $end
+$var wire 1 $ y $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+#0
+$dumpvars
+0$
+0#
+0"
+0!
+$end
+#20
+1!
+1$
+#40
+0$
+1#
+#60
+0!
+1"
+1$
+#80
