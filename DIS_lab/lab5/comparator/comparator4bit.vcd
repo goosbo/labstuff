@@ -1,0 +1,49 @@
+$date
+	Fri Aug 29 10:26:05 2025
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1ns
+$end
+$scope module testbench $end
+$var wire 1 ! lt $end
+$var wire 1 " gt $end
+$var wire 1 # eq $end
+$var reg 4 $ x [3:0] $end
+$var reg 4 % y [3:0] $end
+$scope module c $end
+$var wire 4 & x [3:0] $end
+$var wire 4 ' y [3:0] $end
+$var reg 1 # eq $end
+$var reg 1 " gt $end
+$var reg 1 ! lt $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+#0
+$dumpvars
+b1101 '
+b1101 &
+b1101 %
+b1101 $
+1#
+0"
+0!
+$end
+#20
+1!
+0#
+b1001 %
+b1001 '
+b101 $
+b101 &
+#40
+0!
+1"
+b111 %
+b111 '
+b1000 $
+b1000 &
+#60
