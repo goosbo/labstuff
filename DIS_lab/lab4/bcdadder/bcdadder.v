@@ -1,5 +1,6 @@
-module bcdadder(x,y,s,cout);
+module bcdadder(x,y,cin,s,cout);
     input [3:0] x,y;
+    input cin;
     output [3:0] s;
     output cout;
 
@@ -9,7 +10,7 @@ module bcdadder(x,y,s,cout);
     wire c2;
     wire add6;
 
-    bit4add add1(1'b0, x, y, sum1, c1);
+    bit4add add1(cin, x, y, sum1, c1);
 
     assign add6 = (sum1 > 4'b1001) || c1;
     bit4add add2(1'b0, sum1, 4'b0110, sum2, c2);
