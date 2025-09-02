@@ -84,14 +84,20 @@ void display(node* head){
     printf("NULL\n");
 }
 
-node* reverse(node* head){
-    if(head == NULL)return head;
-    node* temp = head, *prev =NULL;
-    while(temp != NULL){
-        temp->next = prev;
-        prev = temp;
-        temp = temp->next;
+node* reverse(node* head) {
+    if (head == NULL) return head;
+
+    node* prev = NULL;
+    node* curr = head;
+    node* next = NULL;
+
+    while (curr != NULL) {
+        next = curr->next;  
+        curr->next = prev;  
+        prev = curr;        
+        curr = next;      
     }
+
     head = prev;
     return head;
 }
@@ -195,18 +201,20 @@ node* insert_end(node* head, int v){
 int main(){
     node* head = NULL;
     int c,d,val;
+    printf("\nMENU\n");
+    printf("1. Insert a node at the beginning\n");
+    printf("2. Insert a node at the end\n");
+    printf("3. Insert an element before another element\n");
+    printf("4. Insert an element after another element\n");
+    printf("5. Delete an element\n");
+    printf("6. Display\n");
+    printf("7. Reverse\n");
+    printf("8. Sort\n");
+    printf("9. Delete alternate elements\n");
+    printf("10. Insert element into sorted linked list\n");
+    printf("11. Exit\n");
     while(1){
-        printf("\nMENU\n");
-        printf("1. Insert a node at the beginning\n");
-        printf("2. Insert a node at the end\n");
-        printf("3. Insert an element before another element\n");
-        printf("4. Insert an element after another element\n");
-        printf("5. Delete an element\n");
-        printf("6. Display\n");
-        printf("7. Sort\n");
-        printf("8. Delete alternate elements\n");
-        printf("9. Insert element into sorted linked list\n");
-        printf("10. Exit\n");
+        
         printf("Enter your choice: ");
         scanf("%d",&c);
 
@@ -251,20 +259,24 @@ int main(){
             break;
 
         case 7:
+            head = reverse(head);
+            break;
+        
+        case 8:
             head = bubble_sort(head);
             break;
 
-        case 8:
+        case 9:
             delete_alternate(head);
             break;
 
-        case 9:
+        case 10:
             printf("Enter element to be inserted: ");
             scanf("%d",&d);
             head = insert_sorted(head,d);
             break;
 
-        case 10:
+        case 11:
             return 0;
             
         default:
