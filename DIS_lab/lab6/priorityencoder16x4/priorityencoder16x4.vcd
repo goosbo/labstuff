@@ -1,0 +1,75 @@
+$date
+	Fri Sep 19 11:17:14 2025
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1ns
+$end
+$scope module testbench $end
+$var wire 1 ! z $end
+$var wire 4 " y [3:0] $end
+$var reg 16 # w [15:0] $end
+$scope module e $end
+$var wire 16 $ w [15:0] $end
+$var wire 1 ! z $end
+$var reg 4 % y [3:0] $end
+$var integer 32 & k [31:0] $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+#0
+$dumpvars
+b10000 &
+b1111 %
+b1111111111111111 $
+b1111111111111111 #
+b1111 "
+1!
+$end
+#20
+b10000 &
+b0xx "
+b0xx %
+0!
+b0 #
+b0 $
+#40
+b1100 "
+b1100 %
+b10000 &
+1!
+b1110101010101 #
+b1110101010101 $
+#60
+b10000 &
+b1101 "
+b1101 %
+b11101010101011 #
+b11101010101011 $
+#80
+b10000 &
+b111 "
+b111 %
+b10101011 #
+b10101011 $
+#100
+b10000 &
+b1010 "
+b1010 %
+b10010101011 #
+b10010101011 $
+#120
+b10000 &
+b0 "
+b0 %
+b1 #
+b1 $
+#140
+b10000 &
+b11 "
+b11 %
+b1011 #
+b1011 $
+#160
