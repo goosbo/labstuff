@@ -1,0 +1,72 @@
+$date
+	Fri Sep 26 10:45:18 2025
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1ns
+$end
+$scope module testbench $end
+$var wire 1 ! Q $end
+$var reg 1 " Clock $end
+$var reg 1 # Resetn $end
+$var reg 1 $ T $end
+$scope module FF $end
+$var wire 1 " Clock $end
+$var wire 1 # Resetn $end
+$var wire 1 $ T $end
+$var reg 1 ! Q $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+#0
+$dumpvars
+1$
+0#
+0"
+0!
+$end
+#10
+1#
+#20
+1"
+#40
+1!
+0"
+#60
+1"
+#80
+0!
+0"
+#90
+0$
+#100
+1"
+#120
+0"
+#130
+1$
+#140
+1"
+#160
+1!
+0"
+#170
+0$
+#180
+1"
+#200
+0"
+#210
+1$
+#220
+1"
+#240
+0!
+0"
+#250
+0$
+#260
+1"
+#270
