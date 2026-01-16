@@ -1,0 +1,473 @@
+SQL> create table Employee(EmpNo number(12) PRIMARY KEY, EmpName varchar(20) NOT NULL, Gender char(1) CHECK(gender IN ('M','F')) NOT NULL, Salary number(12) NOT NULL, Address varchar(50) NOT NULL, DNo number(12));
+
+SQL> create table Department(DeptNo number(12) PRIMARY KEY, DeptName varchar(20) UNIQUE);
+
+SQL> alter table employee add constraint f_emp_dept foreign key(DNo) references department(DeptNo);
+
+SQL> insert into department values(3124,'CSE');
+
+1 row created.
+
+SQL> insert into department values(1214,'ICT');
+
+1 row created.
+
+SQL> insert into department values(5231,'ECE');
+
+1 row created.
+
+SQL> insert into department values(5231,'ECE');
+
+1 row created.
+
+SQL> select * from department
+  2
+SQL> select * from department;
+
+    DEPTNO DEPTNAME
+---------- --------------------
+      3124 CSE
+      1214 ICT
+      5231 ECE
+      8453 Mech
+SQL> insert into employee values(1023211,'Bob','M',12000,'Manipal',3124);
+
+1 row created.
+
+SQL> insert into employee values(2454243,'Rob','M',18000,'Mangalore',1214);
+
+1 row created.
+
+SQL> insert into employee values(6390123,'Mob','F',13400,'Manipal',5231);
+
+1 row created.
+SQL> insert into employee values(8546434,'Job','F',18900,'Mangalore',8453);
+
+1 row created.
+
+SQL> insert into employee values(1232132,'Kob','F',11990,'Manipal',1214);
+
+1 row created.
+
+SQL> select * from employee;
+
+     EMPNO EMPNAME              G     SALARY ADDRESS                                                   DNO
+---------- -------------------- - ---------- -------------------------------------------------- ----------
+   1023211 Bob                  M      12000 Manipal                                                  3124
+   2454243 Rob                  M      18000 Mangalore                                                1214
+   6390123 Mob                  F      13400 Manipal                                                  5231
+   8546434 Job                  F      18900 Mangalore                                                8453
+   1232132 Kob                  F      11990 Manipal                                                  1214
+
+SQL> insert into department values(8453,'Chem');
+insert into department values(8453,'Chem')
+*
+ERROR at line 1:
+ORA-00001: unique constraint (CSEC17.SYS_C0014008) violated
+
+
+SQL> insert into department values(1111,'CSE');
+insert into department values(1111,'CSE')
+*
+ERROR at line 1:
+ORA-00001: unique constraint (CSEC17.SYS_C0014009) violated
+
+
+SQL> insert into employee values(1232132,'Lob','F',11990,'Manipal',1214);
+insert into employee values(1232132,'Lob','F',11990,'Manipal',1214)
+*
+ERROR at line 1:
+ORA-00001: unique constraint (CSEC17.SYS_C0013932) violated
+
+SQL> insert into employee values(1235555,NULL,NULL,NULL,NULL,NULL);
+insert into employee values(1235555,NULL,NULL,NULL,NULL,NULL)
+                                    *
+ERROR at line 1:
+ORA-01400: cannot insert NULL into ("CSEC17"."EMPLOYEE"."EMPNAME")
+
+
+SQL> insert into employee values(12344444,'Lob','G',11990,'Manipal',1214);
+insert into employee values(12344444,'Lob','G',11990,'Manipal',1214)
+*
+ERROR at line 1:
+ORA-02290: check constraint (CSEC17.SYS_C0013931) violated
+
+SQL> delete from department where DeptNo = 1214;
+delete from department where DeptNo = 1214
+*
+ERROR at line 1:
+ORA-02292: integrity constraint (CSEC17.F_EMP_DEPT) violated - child record found
+
+
+SQL> alter table employee drop constraint f_emp_dept;
+Table altered.
+
+SQL> alter table employee add constraint f_emp_dept foreign key (DNo) references Department(DeptNo) ON DELETE CASCADE;
+
+Table altered.
+
+SQL> select * from department;
+
+    DEPTNO DEPTNAME
+---------- --------------------
+      3124 CSE
+      5231 ECE
+      8453 Mech
+
+SQL> select * from employee;
+
+     EMPNO EMPNAME              G     SALARY ADDRESS                                                   DNO
+---------- -------------------- - ---------- -------------------------------------------------- ----------
+   1023211 Bob                  M      12000 Manipal                                                  3124
+   6390123 Mob                  F      13400 Manipal                                                  5231
+   8546434 Job                  F      18900 Mangalore                                                8453
+
+SQL> insert into employee(empno,empname,gender,address,dno) values (3452432,'Nob','M','Mangalore',3124);
+
+1 row created.
+
+SQL> select * from employee;
+
+     EMPNO EMPNAME              G     SALARY ADDRESS                                                   DNO
+---------- -------------------- - ---------- -------------------------------------------------- ----------
+   1023211 Bob                  M      12000 Manipal                                                  3124
+   6390123 Mob                  F      13400 Manipal                                                  5231
+   8546434 Job                  F      18900 Mangalore                                                8453
+   3452432 Nob                  M      10000 Mangalore                                                3124
+
+SQL> select name,dept_name from student;
+
+NAME                 DEPT_NAME
+-------------------- --------------------
+Zhang                Comp. Sci.
+Shankar              Comp. Sci.
+Brandt               History
+Chavez               Finance
+Peltier              Physics
+Levy                 Physics
+Williams             Comp. Sci.
+Sanchez              Music
+Snow                 Physics
+Brown                Comp. Sci.
+Aoi                  Elec. Eng.
+
+NAME                 DEPT_NAME
+-------------------- --------------------
+Bourikas             Elec. Eng.
+Tanaka               Biology
+
+13 rows selected.
+
+SQL>
+
+SQL> select name from instructor where dept_name='Comp. Sci.';
+
+NAME
+--------------------
+Srinivasan
+Katz
+Brandt
+
+SQL> select title from course where dept_name='Comp. Sci.' and credits = 3;
+
+TITLE
+--------------------------------------------------
+Robotics
+Image Processing
+Database System Concepts
+
+SQL>
+
+SQL> select course.course_id, course.title from takes join course on takes.course_id = course.course_id where takes.id = '12345';
+
+COURSE_I TITLE
+-------- --------------------------------------------------
+CS-101   Intro. to Computer Science
+CS-190   Game Design
+CS-315   Robotics
+CS-347   Database System Concepts
+
+SQL>
+
+SQL> select name from instructor where salary>40000 and salary < 90000;
+
+NAME
+--------------------
+Srinivasan
+El Said
+Gold
+Katz
+Califieri
+Singh
+Crick
+Kim
+
+8 rows selected.
+
+SQL> select id from instructor where id not in(select teaches.id from teaches);
+
+ID
+-----
+76543
+58583
+33456
+
+SQL> insert into classroom values ('Watson','303',500);
+
+1 row created.
+
+SQL> insert into section values ('CS-190','1','Summer','2015','Watson','303','A');
+
+1 row created.
+
+SQL> insert into takes values ('00128','CS-190','1','Summer','2015','A');
+
+1 row created.
+
+SQL> select student.name,course.title,takes.year from student join takes on student.id=takes.id join section on takes.course_id=section.course_id and takes.sec_id=section.sec_id and takes.semester=section.semester and takes.year=section.year join course on section.course_id=course.course_id where section.room_number = '303';
+
+NAME                 TITLE                                                    YEAR
+-------------------- -------------------------------------------------- ----------
+Zhang                Game Design                                              2015
+
+SQL>
+
+SQL> select student.name,takes.course_id as c_name from student join takes on student.id=takes.id where takes.year=2015;
+
+NAME                 C_NAME
+-------------------- --------
+Zhang                CS-190
+
+SQL>
+
+SQL> select name,salary from instructor where salary > Any(select salary from instructor where dept_name='Comp. Sci.');
+
+NAME                     SALARY
+-------------------- ----------
+Einstein                  95000
+Brandt                    92000
+Wu                        90000
+Gold                      87000
+Kim                       80000
+Singh                     80000
+Katz                      75000
+Crick                     72000
+
+8 rows selected.
+
+SQL> insert into dept values('Mechanical','Taylor','500000');
+
+1 row created.
+
+SQL> insert into instructor values('33333','William','Mechanical','88000');
+
+1 row created.
+
+SQL> select name,dept_name from instructor where dept_name like '%ch%';
+
+NAME                 DEPT_NAME
+-------------------- --------------------
+William              Mechanical
+
+SQL>
+
+
+SQL> select name,LENGTH(name) from student;
+
+NAME                 LENGTH(NAME)
+-------------------- ------------
+Zhang                           5
+Shankar                         7
+Brandt                          6
+Chavez                          6
+Peltier                         7
+Levy                            4
+Williams                        8
+Sanchez                         7
+Snow                            4
+Brown                           5
+Aoi                             3
+
+NAME                 LENGTH(NAME)
+-------------------- ------------
+Bourikas                        8
+Tanaka                          6
+
+13 rows selected.
+
+SQL> select dept_name,substr(dept_name,3,3) as string from dept;
+
+DEPT_NAME            STRING
+-------------------- ------------
+Biology              olo
+Comp. Sci.           mp.
+Elec. Eng.           ec.
+Finance              nan
+History              sto
+Mechanical           cha
+Music                sic
+Physics              ysi
+
+8 rows selected.
+
+SQL> select upper(name) from instructor;
+
+UPPER(NAME)
+--------------------
+SRINIVASAN
+WU
+MOZART
+EINSTEIN
+EL SAID
+GOLD
+KATZ
+CALIFIERI
+SINGH
+CRICK
+BRANDT
+
+UPPER(NAME)
+--------------------
+KIM
+WILLIAM
+
+13 rows selected.
+
+
+SQL> insert into classroom values('Watson',555,NULL);
+
+1 row created.
+
+SQL> select * from classroom;
+
+BUILDING        ROOM_NU   CAPACITY
+--------------- ------- ----------
+Packard         101            500
+Painter         514             10
+Taylor          3128            70
+Watson          100             30
+Watson          120             50
+Watson          303            500
+Watson          555
+
+7 rows selected.
+
+SQL> select building,room_number,NVL(capacity,0) from classroom;
+
+BUILDING        ROOM_NU NVL(CAPACITY,0)
+--------------- ------- ---------------
+Packard         101                 500
+Painter         514                  10
+Taylor          3128                 70
+Watson          100                  30
+Watson          120                  50
+Watson          303                 500
+Watson          555                   0
+
+7 rows selected.
+
+SQL> select salary,round(salary/3) from instructor;
+
+    SALARY ROUND(SALARY/3)
+---------- ---------------
+     65000           21667
+     90000           30000
+     40000           13333
+     95000           31667
+     60000           20000
+     87000           29000
+     75000           25000
+     62000           20667
+     80000           26667
+     72000           24000
+     92000           30667
+
+    SALARY ROUND(SALARY/3)
+---------- ---------------
+     80000           26667
+     88000           29333
+
+13 rows selected.
+
+SQL>
+
+
+SQL> select * from department;
+
+    DEPTNO DEPTNAME
+---------- --------------------
+      1214 ICT
+      5231 ECE
+      8453 Mech
+      3124 CSE
+
+SQL> select * from employee;
+
+     EMPNO EMPNAME              G     SALARY ADDRESS                                                   DNO
+---------- -------------------- - ---------- -------------------------------------------------- ----------
+   2454243 Rob                  M      18000 Mangalore                                                1214
+   6390123 Mob                  F      13400 Manipal                                                  5231
+   8546434 Job                  F      18900 Mangalore                                                8453
+   1232132 Kob                  F      11990 Manipal                                                  1214
+   1023211 Bob                  M      12000 Manipal                                                  3124
+
+
+SQL> alter table employee add dob date;
+
+Table altered.
+
+
+SQL> update employee set dob= DATE '2000-08-11' where empname = 'Rob';
+
+1 row updated.
+
+SQL> update employee set dob= DATE '1994-02-23' where empname = 'Mob';
+
+1 row updated.
+
+SQL> update employee set dob= DATE '1996-12-15' where empname = 'Job';
+
+1 row updated.
+
+SQL> update employee set dob= DATE '1997-05-07' where empname = 'Kob';
+
+1 row updated.
+
+SQL> update employee set dob= DATE '1991-06-11' where empname = 'Bob';
+
+1 row updated.
+
+SQL> select * from employee;
+
+     EMPNO EMPNAME              G     SALARY ADDRESS                                                   DNO DOB
+---------- -------------------- - ---------- -------------------------------------------------- ---------- ---------
+   2454243 Rob                  M      18000 Mangalore                                                1214 11-AUG-00
+   6390123 Mob                  F      13400 Manipal                                                  5231 23-FEB-94
+   8546434 Job                  F      18900 Mangalore                                                8453 15-DEC-96
+   1232132 Kob                  F      11990 Manipal                                                  1214 07-MAY-97
+   1023211 Bob                  M      12000 Manipal                                                  3124 11-JUN-91
+
+
+SQL> select empname,to_char(dob,'dd-mon-yyyy') as dd_mon_yyyy,to_char(dob,'dd-mon-yy') as dd_mon_yy,to_char(dob,'dd-mm-yy') as dd_mm_yy from employee;
+
+EMPNAME              DD_MON_YYYY          DD_MON_YY          DD_MM_YY
+-------------------- -------------------- ------------------ --------
+Rob                  11-aug-2000          11-aug-00          11-08-00
+Mob                  23-feb-1994          23-feb-94          23-02-94
+Job                  15-dec-1996          15-dec-96          15-12-96
+Kob                  07-may-1997          07-may-97          07-05-97
+Bob                  11-jun-1991          11-jun-91          11-06-91
+
+SQL>
+
+SQL> select empname,to_char(dob,'YEAR') as YEAR1,to_char(dob,'Year') as Year2,to_char(dob,'year') as year3 from employee;
+
+EMPNAME              YEAR1                                      YEAR2                                      YEAR3
+-------------------- ------------------------------------------ ------------------------------------------ ------------------------------------------
+Rob                  TWO THOUSAND                               Two Thousand                               two thousand
+Mob                  NINETEEN NINETY-FOUR                       Nineteen Ninety-Four                       nineteen ninety-four
+Job                  NINETEEN NINETY-SIX                        Nineteen Ninety-Six                        nineteen ninety-six
+Kob                  NINETEEN NINETY-SEVEN                      Nineteen Ninety-Seven                      nineteen ninety-seven
+Bob                  NINETEEN NINETY-ONE                        Nineteen Ninety-One                        nineteen ninety-one
+
+SQL>
