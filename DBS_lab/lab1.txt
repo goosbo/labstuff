@@ -1,0 +1,130 @@
+SQL> create table EMPLOYEE(emp_no number(8),emp_name varchar(30), emp_address varchar(30));
+
+Table created.
+
+SQL> insert into EMPLOYEE values(12345, 'Bob', 'MANIPAL');
+
+1 row created.
+
+SQL> insert into EMPLOYEE values(12346, 'Rob', 'MANGALORE');
+
+1 row created.
+
+SQL> insert into EMPLOYEE values(12347, 'Mob', 'MANIPAL');
+
+1 row created.
+
+SQL> insert into EMPLOYEE values(12348, 'Job', 'MANGALORE');
+
+1 row created.
+
+SQL> insert into EMPLOYEE values(12349, 'Kob', 'MANIPAL');
+
+1 row created.
+
+SQL> Select emp_name employee_name from EMPLOYEE;
+
+EMPLOYEE_NAME
+------------------------------
+Bob
+Rob
+Mob
+Job
+Kob
+
+SQL> Select * from EMPLOYEE where emp_address='MANIPAL';
+
+    EMP_NO EMP_NAME                       EMP_ADDRESS
+---------- ------------------------------ ------------------------------
+     12345 Bob                            MANIPAL
+     12347 Mob                            MANIPAL
+     12349 Kob                            MANIPAL
+
+SQL> Alter table EMPLOYEE add(salary number(8,2));
+
+Table altered.
+
+SQL> Update EMPLOYEE set salary=500000 where emp_name='Bob';
+
+1 row updated.
+
+SQL> Update EMPLOYEE set salary=450000 where emp_name='Rob';
+
+1 row updated.
+
+SQL> Update EMPLOYEE set salary=450000.55 where emp_name='Mob';
+
+1 row updated.
+
+SQL> Update EMPLOYEE set salary=700000 where emp_name='Job';
+
+1 row updated.
+
+SQL> Update EMPLOYEE set salary=600000 where emp_name='Kob';
+
+1 row updated.
+
+SQL> select * from EMPLOYEE;
+
+    EMP_NO EMP_NAME                       EMP_ADDRESS
+---------- ------------------------------ ------------------------------
+    SALARY
+----------
+     12345 Bob                            MANIPAL
+    500000
+
+     12346 Rob                            MANGALORE
+    450000
+
+     12347 Mob                            MANIPAL
+ 450000.55
+
+
+    EMP_NO EMP_NAME                       EMP_ADDRESS
+---------- ------------------------------ ------------------------------
+    SALARY
+----------
+     12348 Job                            MANGALORE
+    700000
+
+     12349 Kob                            MANIPAL
+    600000
+
+
+SQL> describe employee;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ EMP_NO                                             NUMBER(8)
+ EMP_NAME                                           VARCHAR2(30)
+ EMP_ADDRESS                                        VARCHAR2(30)
+ SALARY                                             NUMBER(8,2)
+
+SQL> delete from employee where emp_address='MANGALORE';
+
+2 rows deleted.
+
+SQL> select * from EMPLOYEE;
+
+    EMP_NO EMP_NAME                       EMP_ADDRESS
+---------- ------------------------------ ------------------------------
+    SALARY
+----------
+     12345 Bob                            MANIPAL
+    500000
+
+     12347 Mob                            MANIPAL
+ 450000.55
+
+     12349 Kob                            MANIPAL
+    600000
+
+
+SQL> rename employee to employee1;
+
+Table renamed.
+
+SQL> drop table employee1;
+
+Table dropped.
+
+SQL>
