@@ -1,0 +1,453 @@
+SQL> CREATE TABLE EMPLOYEE
+  2  (
+  3      Fname     VARCHAR(15) NOT NULL,
+  4      Minit     CHAR,
+  5      Lname     VARCHAR(15) NOT NULL,
+  6      Ssn       CHAR(9)     NOT NULL,
+  7      Bdate     DATE,
+  8      Address   VARCHAR(30),
+  9      Sex       CHAR,
+ 10      Salary    DECIMAL(10,2),
+ 11      Super_ssn CHAR(9),
+ 12      Dno       INT         NOT NULL,
+ 13      PRIMARY KEY (Ssn)
+ 14  );
+
+Table created.
+
+SQL> CREATE TABLE DEPARTMENT
+  2  (
+  3      Dname          VARCHAR(15) NOT NULL,
+  4      Dnumber        INT         NOT NULL,
+  5      Mgr_ssn        CHAR(9)     NOT NULL,
+  6      Mgr_start_date DATE,
+  7      PRIMARY KEY (Dnumber),
+  8      UNIQUE (Dname),
+  9      FOREIGN KEY (Mgr_ssn) REFERENCES EMPLOYEE(Ssn)
+ 10  );
+
+Table created.
+
+SQL> CREATE TABLE DEPT_LOCATIONS
+  2  (
+  3      Dnumber   INT         NOT NULL,
+  4      Dlocation VARCHAR(15) NOT NULL,
+  5      PRIMARY KEY (Dnumber, Dlocation),
+  6      FOREIGN key (Dnumber) REFERENCES DEPARTMENT (Dnumber)
+  7  );
+
+Table created.
+
+SQL> CREATE TABLE PROJECT
+  2  (
+  3      Pname     VARCHAR(15) NOT NULL,
+  4      Pnumber   INT         NOT NULL,
+  5      Plocation VARCHAR(15),
+  6      Dnum      INT         NOT NULL,
+  7      PRIMARY KEY(Pnumber),
+  8      UNIQUE(Pname),
+  9      FOREIGN KEY(Dnum) REFERENCES DEPARTMENT(Dnumber)
+ 10  );
+
+Table created.
+
+SQL> CREATE TABLE WORKS_ON
+  2  (
+  3      Essn  CHAR(9)      NOT NULL,
+  4      Pno   INT          NOT NULL,
+  5      Hours DECIMAL(3,1) NOT NULL,
+  6      PRIMARY KEY(Essn, Pno),
+  7      FOREIGN KEY(Essn) REFERENCES EMPLOYEE(Ssn),
+  8      FOREIGN KEY(Pno)  REFERENCES PROJECT(Pnumber)
+  9  );
+
+Table created.
+
+SQL> CREATE TABLE DEPENDENT
+  2  (
+  3      Essn           CHAR(9)     NOT NULL,
+  4      Dependent_name VARCHAR(15) NOT NULL,
+  5      Sex            CHAR,
+  6      Bdate          DATE,
+  7      Relationship   VARCHAR(8),
+  8      PRIMARY KEY(Essn, Dependent_name),
+  9      FOREIGN KEY(Essn) REFERENCES EMPLOYEE(Ssn)
+ 10  );
+
+Table created.
+
+SQL> INSERT INTO EMPLOYEE
+  2  VALUES ('Richard', 'K', 'Marini', '653298653', TO_DATE('1962-12-30','YYYY-MM-DD'), '98 Oak Forest, Katy, TX', 'M', 37000, '653298653', 4);
+
+1 row created.
+
+SQL> INSERT INTO EMPLOYEE
+  2  VALUES ('John', 'B', 'Smith', '123456789', TO_DATE('1965-01-09','YYYY-MM-DD'), '731 Fondren, Houston, TX', 'M', 30000, '333445555', 5);
+
+1 row created.
+
+SQL> INSERT INTO EMPLOYEE
+  2  VALUES ('Franklin', 'T', 'Wong', '333445555', TO_DATE('1965-12-08','YYYY-MM-DD'), '638 Voss, Houston, TX', 'M', 40000, '888665555', 5);
+
+1 row created.
+
+SQL> INSERT INTO EMPLOYEE
+  2  VALUES ('Alicia', 'J', 'Zelaya', '999887777', TO_DATE('1968-01-19','YYYY-MM-DD'), '3321 Castle, Spring, TX', 'F', 25000, '987654321', 4);
+
+1 row created.
+
+SQL> INSERT INTO EMPLOYEE
+  2  VALUES ('Jennifer', 'S', 'Wallace', '987654321', TO_DATE('1941-06-20','YYYY-MM-DD'), '291 Berry, Bellaire, TX', 'F', 43000, '888665555', 4);
+
+1 row created.
+
+SQL> INSERT INTO EMPLOYEE
+  2  VALUES ('Ramesh', 'K', 'Narayan', '666884444', TO_DATE('1962-09-15','YYYY-MM-DD'), '975 Fire Oak, Humble, TX', 'M', 38000, '333445555', 5);
+
+1 row created.
+
+SQL> INSERT INTO EMPLOYEE
+  2  VALUES ('Joyce', 'A', 'English', '453453453', TO_DATE('1972-07-31','YYYY-MM-DD'), '5631 Rice, Houston, TX', 'F', 25000, '333445555', 5);
+
+1 row created.
+
+SQL> INSERT INTO EMPLOYEE
+  2  VALUES ('Ahmad', 'V', 'Jabbar', '987987987', TO_DATE('1969-03-29','YYYY-MM-DD'), '980 Dallas, Houston, TX', 'M', 25000, '987654321', 4);
+
+1 row created.
+
+SQL> INSERT INTO EMPLOYEE
+  2  VALUES ('James', 'E', 'Borg', '888665555', TO_DATE('1937-11-10','YYYY-MM-DD'), '450 Stone, Houston, TX', 'M', 55000, NULL, 4);
+
+1 row created.
+SQL> INSERT INTO DEPT_LOCATIONS
+  2  VALUES (1, 'Houston');
+
+1 row created.
+
+SQL> INSERT INTO DEPT_LOCATIONS
+  2  VALUES (4, 'Stafford');
+
+1 row created.
+
+SQL> INSERT INTO DEPT_LOCATIONS
+  2  VALUES (5, 'Bellaire');
+
+1 row created.
+
+SQL> INSERT INTO DEPT_LOCATIONS
+  2  VALUES (5, 'Sugarland');
+
+1 row created.
+
+SQL> INSERT INTO DEPT_LOCATIONS
+  2  VALUES (5, 'Houston');
+
+1 row created.
+
+SQL>
+SQL>
+SQL> INSERT INTO PROJECT
+  2  VALUES ('ProductX', 1,' Bellaire', 5);
+
+1 row created.
+
+SQL> INSERT INTO PROJECT
+  2  VALUES ('ProductY', 2, 'Sugarland', 5);
+
+1 row created.
+
+SQL> INSERT INTO PROJECT
+  2  VALUES ('ProductZ', 3, 'Houston', 5);
+
+1 row created.
+
+SQL> INSERT INTO PROJECT
+  2  VALUES ('Computerization', 10, 'Stafford', 4);
+
+1 row created.
+
+SQL> INSERT INTO PROJECT
+  2  VALUES ('Reorganization', 20, 'Houston', 1);
+
+1 row created.
+
+SQL> INSERT INTO PROJECT
+  2  VALUES ('Newbenefits', 30, 'Starfford', 4);
+
+1 row created.
+
+SQL>
+SQL>
+SQL> INSERT INTO WORKS_ON
+  2  VALUES ('123456789', 1, 32.5);
+
+1 row created.
+
+SQL> INSERT INTO WORKS_ON
+  2  VALUES ('123456789', 2, 7.5);
+
+1 row created.
+
+SQL> INSERT INTO WORKS_ON
+  2  VALUES ('666884444', 3, 40.0);
+
+1 row created.
+
+SQL> INSERT INTO WORKS_ON
+  2  VALUES ('453453453', 1, 20.0);
+
+1 row created.
+
+SQL> INSERT INTO WORKS_ON
+  2  VALUES ('453453453', 2, 20.0);
+
+1 row created.
+
+SQL> INSERT INTO WORKS_ON
+  2  VALUES ('333445555', 2, 10.0);
+
+1 row created.
+
+SQL> INSERT INTO WORKS_ON
+  2  VALUES ('333445555', 3, 10.0);
+
+1 row created.
+
+SQL> INSERT INTO WORKS_ON
+  2  VALUES ('333445555', 10, 10.0);
+
+1 row created.
+
+SQL> INSERT INTO WORKS_ON
+  2  VALUES ('333445555', 20, 10.0);
+
+1 row created.
+
+SQL> INSERT INTO WORKS_ON
+  2  VALUES ('999887777', 30, 30.0);
+
+1 row created.
+
+SQL> INSERT INTO WORKS_ON
+  2  VALUES ('999887777', 10, 10.0);
+
+1 row created.
+
+SQL> INSERT INTO WORKS_ON
+  2  VALUES ('987987987', 10, 35.0);
+
+1 row created.
+
+SQL> INSERT INTO WORKS_ON
+  2  VALUES ('987987987', 30, 5.0);
+
+1 row created.
+
+SQL> INSERT INTO WORKS_ON
+  2  VALUES ('987654321', 30, 20.0);
+
+1 row created.
+
+SQL> INSERT INTO WORKS_ON
+  2  VALUES ('987654321', 20, 15.0);
+
+1 row created.
+
+SQL> INSERT INTO WORKS_ON
+  2  VALUES ('888665555', 20, 0);
+
+1 row created.
+
+SQL>
+SQL> INSERT INTO DEPENDENT
+  2  VALUES ('333445555', 'Alice', 'F', TO_DATE('1986-04-05','YYYY-MM-DD'), 'Daughter');
+
+1 row created.
+
+SQL> INSERT INTO DEPENDENT
+  2  VALUES ('333445555', 'Theodore', 'M', TO_DATE('1983-10-25','YYYY-MM-DD'), 'Son');
+
+1 row created.
+
+SQL> INSERT INTO DEPENDENT
+  2  VALUES ('333445555', 'Joy', 'F', TO_DATE('1958-05-03','YYYY-MM-DD'), 'Spouse');
+
+1 row created.
+
+SQL> INSERT INTO DEPENDENT
+  2  VALUES ('987654321', 'Abner', 'M', TO_DATE('1942-02-28','YYYY-MM-DD'), 'Spouse');
+
+1 row created.
+
+SQL> INSERT INTO DEPENDENT
+  2  VALUES ('123456789', 'Michael', 'M', TO_DATE('1988-01-04','YYYY-MM-DD'), 'Son');
+
+1 row created.
+
+SQL> INSERT INTO DEPENDENT
+  2  VALUES ('123456789', 'Alice', 'F', TO_DATE('1988-12-30','YYYY-MM-DD'), 'Daughter');
+
+1 row created.
+
+SQL> INSERT INTO DEPENDENT
+  2  VALUES ('123456789', 'Elizabeth', 'F', TO_DATE('1967-05-05','YYYY-MM-DD'), 'Spouse');
+
+1 row created.
+
+SQL>
+
+SQL> select ssn,Fname,Minit,Lname,Bdate,Address from employee where Fname = 'John' and Minit = 'B' and Lname = 'Smith';
+
+SSN       FNAME           M LNAME           BDATE     ADDRESS
+--------- --------------- - --------------- --------- ------------------------------
+123456789 John            B Smith           09-JAN-65 731 Fondren, Houston, TX
+
+SQL> select Fname||' '||Minit||' '||Lname as name,address,Dname as department from employee e join department d on e.Dno = d.Dnumber where d.Dnumber = 5;
+
+NAME                              ADDRESS                        DEPARTMENT
+--------------------------------- ------------------------------ ---------------
+John B Smith                      731 Fondren, Houston, TX       Research
+Franklin T Wong                   638 Voss, Houston, TX          Research
+Ramesh K Narayan                  975 Fire Oak, Humble, TX       Research
+Joyce A English                   5631 Rice, Houston, TX         Research
+
+SQL> select p.Pnumber,d.Dnumber,e.Lname,e.address,e.bdate from project p join department d on p.Dnum = d.Dnumber join employee e on d.Mgr_ssn=e.ssn;
+
+   PNUMBER    DNUMBER LNAME           ADDRESS                        BDATE
+---------- ---------- --------------- ------------------------------ ---------
+         1          5 Wong            638 Voss, Houston, TX          08-DEC-65
+         2          5 Wong            638 Voss, Houston, TX          08-DEC-65
+         3          5 Wong            638 Voss, Houston, TX          08-DEC-65
+        10          4 Wallace         291 Berry, Bellaire, TX        20-JUN-41
+        20          1 Borg            450 Stone, Houston, TX         10-NOV-37
+        30          4 Wallace         291 Berry, Bellaire, TX        20-JUN-41
+
+6 rows selected.
+
+SQL> select e.Fname as emp_fname, e.Lname as emp_lname,s.Fname as sup_fname,s.Lname as sup_lname from employee e join employee s on e.super_ssn = s.ssn;
+
+EMP_FNAME       EMP_LNAME       SUP_FNAME       SUP_LNAME
+--------------- --------------- --------------- ---------------
+Richard         Marini          Richard         Marini
+John            Smith           Franklin        Wong
+Ramesh          Narayan         Franklin        Wong
+Joyce           English         Franklin        Wong
+Alicia          Zelaya          Jennifer        Wallace
+Ahmad           Jabbar          Jennifer        Wallace
+Franklin        Wong            James           Borg
+Jennifer        Wallace         James           Borg
+
+8 rows selected.
+SQL> select p.pnumber from project p where exists(select 1 from works_on w join employee e on w.essn=e.ssn where p.pnumber = w.pno and e.lname = 'Smith') or exists(select 1 from department d join employee e1 on d.mgr_ssn=e1.ssn where p.dnum=d.dnumber and e1.lname = 'Smith');
+
+   PNUMBER
+----------
+         1
+         2
+
+SQL> select Fname||' '||Minit||' '||Lname as name,salary*1.10 as updated_sal from employee e join works_on w on w.essn = e.ssn where w.pno = 1;
+
+NAME                              UPDATED_SAL
+--------------------------------- -----------
+John B Smith                            33000
+Joyce A English                         27500
+
+SQL> select Fname||' '||Minit||' '||Lname as name,pname,dname from employee e join works_on w on w.essn = e.ssn join project p on w.pno = p.pnumber join department d on e.dno = d.dnumber
+  2  order by d.dname,e.lname,e.fname;
+
+NAME                              PNAME           DNAME
+--------------------------------- --------------- ---------------
+James E Borg                      Reorganization  Administration
+Ahmad V Jabbar                    Computerization Administration
+Ahmad V Jabbar                    Newbenefits     Administration
+Jennifer S Wallace                Newbenefits     Administration
+Jennifer S Wallace                Reorganization  Administration
+Alicia J Zelaya                   Newbenefits     Administration
+Alicia J Zelaya                   Computerization Administration
+Joyce A English                   ProductY        Research
+Joyce A English                   ProductX        Research
+Ramesh K Narayan                  ProductZ        Research
+John B Smith                      ProductY        Research
+
+NAME                              PNAME           DNAME
+--------------------------------- --------------- ---------------
+John B Smith                      ProductX        Research
+Franklin T Wong                   Reorganization  Research
+Franklin T Wong                   ProductZ        Research
+Franklin T Wong                   ProductY        Research
+Franklin T Wong                   Computerization Research
+
+16 rows selected.
+
+
+SQL> insert into dependent values('999887777','Alicia','F','09-Jan-34','Daughter');
+
+1 row created.
+
+SQL> select Fname||' '||Minit||' '||Lname as name,e.sex from employee e join dependent d on e.ssn = d.essn where d.dependent_name = e.fname and e.sex=d.sex;
+
+NAME                              S
+--------------------------------- -
+Alicia J Zelaya                   F
+
+SQL>
+
+SQL> select Fname||' '||Minit||' '||Lname as name from employee e where not exists(select 1 from dependent d where d.essn = e.ssn);
+
+NAME
+---------------------------------
+Richard K Marini
+James E Borg
+Ahmad V Jabbar
+Joyce A English
+Ramesh K Narayan
+
+SQL>
+
+SQL> select Fname||' '||Minit||' '||Lname as name from department d join employee e on d.mgr_ssn = e.ssn where exists(select 1 from dependent dp where dp.essn = e.ssn);
+
+NAME
+---------------------------------
+Franklin T Wong
+Jennifer S Wallace
+
+SQL>
+
+SQL> select sum(salary) as sumsal, max(salary) as maxsal, min(salary) as minsal, avg(salary) as avgsal from employee;
+
+    SUMSAL     MAXSAL     MINSAL     AVGSAL
+---------- ---------- ---------- ----------
+    318000      55000      25000 35333.3333
+
+SQL> select pno,pname,count(*) as empnum from works_on w join project p on w.pno = p.pnumber group by w.pno,p.pname;
+
+       PNO PNAME               EMPNUM
+---------- --------------- ----------
+         2 ProductY                 3
+        30 Newbenefits              3
+        20 Reorganization           3
+         1 ProductX                 2
+        10 Computerization          3
+         3 ProductZ                 2
+
+SQL>
+
+SQL> select pno,pname,count(*) as empnum from works_on w join project p on w.pno = p.pnumber group by w.pno,p.pname having count(*)>2;
+
+       PNO PNAME               EMPNUM
+---------- --------------- ----------
+         2 ProductY                 3
+        30 Newbenefits              3
+        20 Reorganization           3
+        10 Computerization          3
+
+SQL> insert into employee values('Bob','E','Bobby','142419245',TO_DATE('1999-12-12','YYYY-MM-DD'),'823 Random, Town, TX','M',34000,NULL,4);
+
+1 row created.
+
+SQL> select dno,count(case when salary > 40000 then 1 end) as empnum from employee group by dno having count(*) > 5;
+
+       DNO     EMPNUM
+---------- ----------
+         4          2
