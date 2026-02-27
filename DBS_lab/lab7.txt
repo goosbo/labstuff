@@ -1,0 +1,284 @@
+SQL> create table studenttable(RollNo number(4),GPA number(4,2));
+
+Table created.
+
+SQL> insert into studenttable values(1,5.8);
+
+1 row created.
+
+SQL> insert into studenttable values(2,6.5);
+
+1 row created.
+
+SQL> insert into studenttable values(3,3.4);
+
+1 row created.
+
+SQL> insert into studenttable values(4,7.8);
+
+1 row created.
+
+SQL> insert into studenttable values(5,9.5);
+
+1 row created.
+
+SQL> select * from studenttable;
+
+    ROLLNO        GPA
+---------- ----------
+         1        5.8
+         2        6.5
+         3        3.4
+         4        7.8
+         5        9.5
+SQL> declare
+  2     rno number(4);
+  3     g number(4,2);
+  4  begin
+  5     rno := '&rollno';
+  6     select gpa into g from studenttable where rollno = rno;
+  7     dbms_output.put_line('GPA of student: '|| g);
+  8  end;
+  9  /
+Enter value for rollno: 3
+old   5:        rno := '&rollno';
+new   5:        rno := '3';
+GPA of student: 3.4
+
+PL/SQL procedure successfully completed.
+
+SQL>
+
+SQL> declare
+  2     rno number(4);
+  3     g number(4,2);
+  4  begin
+  5     rno := '&rollno';
+  6     select gpa into g from studenttable where rollno = rno;
+  7     if g >= 9 then
+  8             dbms_output.put_line('Grade: A+');
+  9     elsif g >= 8 then
+ 10             dbms_output.put_line('Grade: A');
+ 11     elsif g >= 7 then
+ 12             dbms_output.put_line('Grade: B');
+ 13     elsif g >= 6 then
+ 14             dbms_output.put_line('Grade: C');
+ 15     elsif g >= 5 then
+ 16             dbms_output.put_line('Grade: D');
+ 17     elsif g >= 4 then
+ 18             dbms_output.put_line('Grade: E');
+ 19     else
+ 20             dbms_output.put_line('Grade: F');
+ 21     end if;
+ 22  end;
+ 23  /
+Enter value for rollno: 3
+old   5:        rno := '&rollno';
+new   5:        rno := '3';
+Grade: F
+
+PL/SQL procedure successfully completed.
+
+SQL>
+
+SQL> declare
+  2     fine int;
+  3     days number;
+  4  begin
+  5     days := '&numdays';
+  6     if days <= 7 then
+  7             fine := 0;
+  8     elsif days <= 15 then
+  9             fine := (days-7);
+ 10     elsif days <= 30 then
+ 11             fine := 8 + (days-15)*2;
+ 12     else
+ 13             fine := 38 + (days-30)*5;
+ 14     end if;
+ 15     dbms_output.put_line('Fine: '||fine);
+ 16  end;
+ 17  /
+Enter value for numdays: 32
+old   5:        days := '&numdays';
+new   5:        days := '32';
+Fine: 48
+
+PL/SQL procedure successfully completed.
+
+SQL>
+
+SQL> declare
+  2     rno number(4) := 1;
+  3     g  number(4,2);
+  4     grade varchar(2);
+  5  begin
+  6     while rno <= 5
+  7     loop
+  8             select gpa into g from studenttable where rollno = rno;
+  9             if g >= 9 then
+ 10                     grade := 'A+';
+ 11             elsif g >= 8 then
+ 12                     grade := 'A';
+ 13             elsif g >= 7 then
+ 14                     grade := 'B';
+ 15             elsif g >= 6 then
+ 16                     grade := 'C';
+ 17             elsif g >= 5 then
+ 18                     grade := 'D';
+ 19             elsif g >= 4 then
+ 20                     grade := 'E';
+ 21             else
+ 22                     grade := 'F';
+ 23             end if;
+ 24             dbms_output.put_line('Grade of student '||rno||': '||grade);
+ 25             rno := rno + 1;
+ 26     end loop;
+ 27  end;
+ 28  /
+Grade of student 1: D
+Grade of student 2: C
+Grade of student 3: F
+Grade of student 4: B
+Grade of student 5: A+
+
+PL/SQL procedure successfully completed.
+
+SQL>
+
+SQL> ALTER TABLE StudentTable
+  2  ADD LetterGrade VARCHAR2(2);
+
+SQL> declare
+  2     rno number(4) := 1;
+  3     g  number(4,2);
+  4     grade varchar(2);
+  5  begin
+  6     while rno <= 5
+  7     loop
+  8             select gpa into g from studenttable where rollno = rno;
+  9             if g >= 9 then
+ 10                     grade := 'A+';
+ 11             elsif g >= 8 then
+ 12                     grade := 'A';
+ 13             elsif g >= 7 then
+ 14                     grade := 'B';
+ 15             elsif g >= 6 then
+ 16                     grade := 'C';
+ 17             elsif g >= 5 then
+ 18                     grade := 'D';
+ 19             elsif g >= 4 then
+ 20                     grade := 'E';
+ 21             else
+ 22                     grade := 'F';
+ 23             end if;
+ 24             update studenttable set lettergrade = grade where rollno = rno;
+ 25             rno := rno +1;
+ 26     end loop;
+ 27  end;
+ 28  /
+
+PL/SQL procedure successfully completed.
+
+SQL> select * from studenttable;
+
+    ROLLNO        GPA LE
+---------- ---------- --
+         1        5.8 D
+         2        6.5 C
+         3        3.4 F
+         4        7.8 B
+         5        9.5 A+
+
+SQL>
+
+SQL> declare
+  2     maxgpa number(4,2) := -1;
+  3     maxrno number(4);
+  4  begin
+  5     for st in (select rollno, gpa from studenttable)
+  6     loop
+  7             if st.gpa > maxgpa then
+  8                     maxgpa := st.gpa;
+  9                     maxrno := st.rollno;
+ 10             end if;
+ 11     end loop;
+ 12     dbms_output.put_line('student '||maxrno||' has max gpa of '||maxgpa);
+ 13  end;
+ 14  /
+student 5 has max gpa of 9.5
+
+PL/SQL procedure successfully completed.
+
+SQL>
+
+SQL> declare
+  2     rno number(4) := 1;
+  3     g number(4,2);
+  4     grade varchar(2);
+  5  begin
+  6     <<loopstart>>
+  7     select gpa into g from studenttable where rollno = rno;
+  8     if g >= 9 then
+  9             grade := 'A+';
+ 10     elsif g >= 8 then
+ 11             grade := 'A';
+ 12     elsif g >= 7 then
+ 13             grade := 'B';
+ 14     elsif g >= 6 then
+ 15             grade := 'C';
+ 16     elsif g >= 5 then
+ 17             grade := 'D';
+ 18     elsif g >= 4 then
+ 19             grade := 'E';
+ 20     else
+ 21             grade := 'F';
+ 22     end if;
+ 23     dbms_output.put_line('Grade of student '||rno||': '||grade);
+ 24     rno := rno + 1;
+ 25     if rno <= 5 then
+ 26             goto loopstart;
+ 27     end if;
+ 28  end;
+ 29  /
+Grade of student 1: D
+Grade of student 2: C
+Grade of student 3: F
+Grade of student 4: B
+Grade of student 5: A+
+
+PL/SQL procedure successfully completed.
+
+SQL>
+
+SQL> declare
+  2     i_id varchar(5);
+  3     i_name varchar(20);
+  4     i_dept varchar(20);
+  5     i_sal numeric(8,2);
+  6  begin
+  7     i_name := '&instructor_name';
+  8     select id,dept_name,salary into i_id,i_dept,i_sal from instructor where name = i_name;
+  9     dbms_output.put_line('Instructor Details');
+ 10     dbms_output.put_line('Instructor ID: '||i_id);
+ 11     dbms_output.put_line('Instructor Name: '||i_name);
+ 12     dbms_output.put_line('Department: '||i_dept);
+ 13     dbms_output.put_line('Salary: '||i_sal);
+ 14  exception
+ 15     when no_data_found then
+ 16             dbms_output.put_line('instructor not found');
+ 17     when too_many_rows then
+ 18             dbms_output.put_line('multiple instructors found with same name');
+ 19  end;
+ 20  /
+Enter value for instructor_name: Crick
+old   7:        i_name := '&instructor_name';
+new   7:        i_name := 'Crick';
+Instructor Details
+Instructor ID: 76766
+Instructor Name: Crick
+Department: Biology
+Salary: 72000
+
+PL/SQL procedure successfully completed.
+
+SQL>

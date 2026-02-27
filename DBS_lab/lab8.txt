@@ -1,0 +1,249 @@
+SQL> create table salary_raise(instructor_id number, raise_date date, raise_amt number);
+
+Table created.
+
+SQL> declare
+  2     cursor isal is select id, salary from instructor where dept_name = '&dept' for update;
+  3  iid instructor.id%type;
+  4  iis instructor.salary%type;
+  5  begin
+  6     open isal;
+  7     loop
+  8     fetch isal into iid,iis;
+  9     exit when isal%NOTFOUND;
+ 10     update instructor set salary = salary*1.05 where current of isal;
+ 11     insert into salary_raise values (iid, sysdate,iis*0.05);
+ 12     end loop;
+ 13     close isal;
+ 14  end;
+ 15  /
+Enter value for dept: Comp. Sci.
+old   2:        cursor isal is select id, salary from instructor where dept_name = '&dept' for update;
+new   2:        cursor isal is select id, salary from instructor where dept_name = 'Comp. Sci.' for update;
+
+PL/SQL procedure successfully completed.	
+
+SQL> select * from salary_raise;
+
+INSTRUCTOR_ID RAISE_DAT  RAISE_AMT
+------------- --------- ----------
+        11111 27-FEB-26       3500
+        44444 27-FEB-26       3050
+        55555 27-FEB-26       2500
+        10101 27-FEB-26       3250
+        45565 27-FEB-26       3750
+        83821 27-FEB-26       4600
+
+6 rows selected.
+
+SQL>
+
+SQL> declare
+  2     cursor st is select id,name,dept_name,tot_cred from student order by tot_cred asc for update;
+  3     sid student.id%type;
+  4     sname student.name%type;
+  5     sdept student.dept_name%type;
+  6     scred student.tot_cred%type;
+  7  begin
+  8     open st;
+  9     loop
+ 10     fetch st into sid,sname,sdept,scred;
+ 11     exit when st%NOTFOUND or st%ROWCOUNT > 10;
+ 12     dbms_output.put_line('ID: '||sid||' Name: '||sname||' Dept Name: '||sdept||' Total Credits: '||scred);
+ 13     end loop;
+ 14     close st;
+ 15  end;
+ 16  /
+ID: 70557 Name: Snow Dept Name: Physics Total Credits: 0
+ID: 12345 Name: Shankar Dept Name: Comp. Sci. Total Credits: 32
+ID: 55739 Name: Sanchez Dept Name: Music Total Credits: 38
+ID: 45678 Name: Levy Dept Name: Physics Total Credits: 46
+ID: 54321 Name: Williams Dept Name: Comp. Sci. Total Credits: 54
+ID: 44553 Name: Peltier Dept Name: Physics Total Credits: 56
+ID: 76543 Name: Brown Dept Name: Comp. Sci. Total Credits: 58
+ID: 76653 Name: Aoi Dept Name: Elec. Eng. Total Credits: 60
+ID: 19991 Name: Brandt Dept Name: History Total Credits: 80
+ID: 98765 Name: Bourikas Dept Name: Elec. Eng. Total Credits: 98
+
+PL/SQL procedure successfully completed.
+
+SQL>
+
+SQL> declare
+  2     cursor cc is select c.course_id, c.title, c.dept_name, c.credits, i.name as instructor_name, sc.building, sc.room_number,sc.time_slot_id, COUNT(t.id) as tot_student_num from course c join section sc on c.course_id = sc.course_id join teaches te on c.course_id = te.course_id and sc.sec_id = te.sec_id and sc.semester = te.semester and sc.year = te.year join instructor i on te.id = i.id left join takes t on sc.course_id = t.course_id and sc.sec_id = t.sec_id and sc.semester = t.semester and sc.year = t.year group by c.course_id, c.title, c.dept_name, c.credits, i.name, sc.building, sc.room_number, sc.time_slot_id order by c.course_id;
+  3  begin
+  4     for rec in cc loop
+  5             dbms_output.put_line(
+  6             'Course ID: ' || rec.course_id ||
+  7        ', Title: ' || rec.title ||
+  8        ', Dept: ' || rec.dept_name ||
+  9        ', Credits: ' || rec.credits ||
+ 10        ', Instructor: ' || rec.instructor_name ||
+ 11        ', Building: ' || rec.building ||
+ 12        ', Room: ' || rec.room_number ||
+ 13        ', Time Slot: ' || rec.time_slot_id ||
+ 14        ', Total Students: ' || rec.tot_student_num
+ 15      );
+ 16  end loop;
+ 17  end;
+ 18  /
+Course ID: BIO-101, Title: Intro. to Biology, Dept: Biology, Credits: 4,
+Instructor: Crick, Building: Painter, Room: 514, Time Slot: B, Total Students: 1
+Course ID: BIO-301, Title: Genetics, Dept: Biology, Credits: 4, Instructor:
+Crick, Building: Painter, Room: 514, Time Slot: A, Total Students: 1
+Course ID: BIO-399, Title: Computational Biology, Dept: Biology, Credits: 3,
+Instructor: Crick, Building: Painter, Room: 514, Time Slot: A, Total Students: 1
+Course ID: CS-101, Title: Intro. to Computer Science, Dept: Comp. Sci., Credits:
+4, Instructor: Katz, Building: Packard, Room: 101, Time Slot: F, Total Students:
+1
+Course ID: CS-101, Title: Intro. to Computer Science, Dept: Comp. Sci., Credits:
+4, Instructor: Srinivasan, Building: Packard, Room: 101, Time Slot: H, Total
+Students: 6
+Course ID: CS-190, Title: Game Design, Dept: Comp. Sci., Credits: 4, Instructor:
+Brandt, Building: Taylor, Room: 3128, Time Slot: A, Total Students: 2
+Course ID: CS-190, Title: Game Design, Dept: Comp. Sci., Credits: 4, Instructor:
+Brandt, Building: Taylor, Room: 3128, Time Slot: E, Total Students: 0
+Course ID: CS-315, Title: Robotics, Dept: Comp. Sci., Credits: 3, Instructor:
+Srinivasan, Building: Watson, Room: 120, Time Slot: D, Total Students: 2
+Course ID: CS-319, Title: Image Processing, Dept: Comp. Sci., Credits: 3,
+Instructor: Brandt, Building: Taylor, Room: 3128, Time Slot: C, Total Students:
+1
+Course ID: CS-319, Title: Image Processing, Dept: Comp. Sci., Credits: 3,
+Instructor: Katz, Building: Watson, Room: 100, Time Slot: B, Total Students: 1
+Course ID: CS-347, Title: Database System Concepts, Dept: Comp. Sci., Credits:
+3, Instructor: Srinivasan, Building: Taylor, Room: 3128, Time Slot: A, Total
+Students: 2
+Course ID: EE-181, Title: Intro. to Digital Systems, Dept: Elec. Eng., Credits:
+3, Instructor: Kim, Building: Taylor, Room: 3128, Time Slot: C, Total Students:
+1
+Course ID: FIN-201, Title: Investment Banking, Dept: Finance, Credits: 3,
+Instructor: Wu, Building: Packard, Room: 101, Time Slot: B, Total Students: 1
+Course ID: HIS-351, Title: World History, Dept: History, Credits: 3, Instructor:
+El Said, Building: Painter, Room: 514, Time Slot: C, Total Students: 1
+Course ID: MU-199, Title: Music Video Production, Dept: Music, Credits: 3,
+Instructor: Mozart, Building: Packard, Room: 101, Time Slot: D, Total Students:
+1
+Course ID: PHY-101, Title: Physical Principles, Dept: Physics, Credits: 4,
+Instructor: Einstein, Building: Watson, Room: 100, Time Slot: A, Total Students:
+1
+
+PL/SQL procedure successfully completed.
+
+SQL>
+
+SQL> DECLARE
+  2    CURSOR c_students IS
+  3      SELECT s.id, s.tot_cred, t.course_id, t.sec_id, t.semester, t.year
+  4      FROM student s
+  5           JOIN takes t ON s.id = t.id
+  6      WHERE t.course_id = 'CS-101'
+  7      FOR UPDATE;
+  8  BEGIN
+  9    FOR rec IN c_students LOOP
+ 10      IF rec.tot_cred < 30 THEN
+ 11        DELETE FROM takes
+ 12        WHERE CURRENT OF c_students;
+ 13
+ 14        DBMS_OUTPUT.PUT_LINE(
+ 15          'Student ' || rec.id ||
+ 16          ' deregistered from ' || rec.course_id ||
+ 17          ' (credits: ' || rec.tot_cred || ')'
+ 18        );
+ 19      END IF;
+ 20    END LOOP;
+ 21  END;
+ 22  /
+
+PL/SQL procedure successfully completed.
+
+SQL> UPDATE StudentTable SET LetterGrade = 'F';
+
+5 rows updated.
+
+SQL> DECLARE
+  2    CURSOR c_students IS
+  3      SELECT RollNo, GPA
+  4      FROM StudentTable
+  5      FOR UPDATE;
+  6  BEGIN
+  7    FOR rec IN c_students LOOP
+  8      IF rec.GPA >= 9 THEN
+  9        UPDATE StudentTable SET LetterGrade = 'A+' WHERE CURRENT OF c_students;
+ 10      ELSIF rec.GPA >= 8 THEN
+ 11        UPDATE StudentTable SET LetterGrade = 'A' WHERE CURRENT OF c_students;
+ 12      ELSIF rec.GPA >= 7 THEN
+ 13        UPDATE StudentTable SET LetterGrade = 'B' WHERE CURRENT OF c_students;
+ 14      ELSIF rec.GPA >= 6 THEN
+ 15        UPDATE StudentTable SET LetterGrade = 'C' WHERE CURRENT OF c_students;
+ 16      ELSIF rec.GPA >= 5 THEN
+ 17        UPDATE StudentTable SET LetterGrade = 'D' WHERE CURRENT OF c_students;
+ 18      ELSE
+ 19        UPDATE StudentTable SET LetterGrade = 'F' WHERE CURRENT OF c_students;
+ 20      END IF;
+ 21    END LOOP;
+ 22  END;
+ 23  /
+
+SQL> declare
+  2     cursor inst(cid varchar2) is select i.id,i.name from instructor i join teaches t on i.id = t.id where t.course_id = cid;
+  3  begin
+  4     for rec in inst('CS-101')
+  5     loop
+  6     dbms_output.put_line('instructor id: '||rec.id||' name: '||rec.name);
+  7     end loop;
+  8  end;
+  9  /
+instructor id: 10101 name: Srinivasan
+instructor id: 45565 name: Katz
+
+PL/SQL procedure successfully completed.
+
+SQL>
+
+SQL> DECLARE
+  2    CURSOR c_students IS
+  3      SELECT s.id, s.name, s.dept_name, t.course_id, t.sec_id, t.semester, t.year
+  4      FROM student s
+  5           JOIN advisor a ON s.id = a.s_id
+  6           JOIN teaches te ON a.i_id = te.id
+  7           JOIN takes t ON s.id = t.id
+  8                        AND t.course_id = te.course_id
+  9                        AND t.sec_id = te.sec_id
+ 10                        AND t.semester = te.semester
+ 11                        AND t.year = te.year;
+ 12  BEGIN
+ 13    FOR rec IN c_students LOOP
+ 14      DBMS_OUTPUT.PUT_LINE(
+ 15        'Student ID: ' || rec.id ||
+ 16        ', Name: ' || rec.name ||
+ 17        ', Dept: ' || rec.dept_name ||
+ 18        ', Course: ' || rec.course_id ||
+ 19        ', Section: ' || rec.sec_id ||
+ 20        ', Semester: ' || rec.semester ||
+ 21        ', Year: ' || rec.year
+ 22      );
+ 23    END LOOP;
+ 24  END;
+ 25  /
+Student ID: 12345, Name: Shankar, Dept: Comp. Sci., Course: CS-101, Section: 1,
+Semester: Fall, Year: 2009
+Student ID: 12345, Name: Shankar, Dept: Comp. Sci., Course: CS-315, Section: 1,
+Semester: Spring, Year: 2010
+Student ID: 12345, Name: Shankar, Dept: Comp. Sci., Course: CS-347, Section: 1,
+Semester: Fall, Year: 2009
+Student ID: 44553, Name: Peltier, Dept: Physics, Course: PHY-101, Section: 1,
+Semester: Fall, Year: 2009
+Student ID: 98988, Name: Tanaka, Dept: Biology, Course: BIO-101, Section: 1,
+Semester: Summer, Year: 2009
+Student ID: 98988, Name: Tanaka, Dept: Biology, Course: BIO-301, Section: 1,
+Semester: Summer, Year: 2010
+Student ID: 98988, Name: Tanaka, Dept: Biology, Course: BIO-399, Section: 2,
+Semester: Winter, Year: 2010
+Student ID: 76653, Name: Aoi, Dept: Elec. Eng., Course: EE-181, Section: 1,
+Semester: Spring, Year: 2009
+
+PL/SQL procedure successfully completed.
+
+SQL>
+
+
