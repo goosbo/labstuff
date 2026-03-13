@@ -1,0 +1,256 @@
+SQL> create or replace procedure goodday is
+  2     begin
+  3     dbms_output.put_line('Good Day to You');
+  4     end;
+  5  /
+
+Procedure created.
+
+SQL> declare
+  2     begin
+  3     goodday;
+  4     end;
+  5  /
+Good Day to You
+
+PL/SQL procedure successfully completed.
+
+SQL>
+
+SQL> create or replace procedure deptstuff(dname varchar) is
+  2     begin
+  3     dbms_output.put_line('Instructors in department '||dname);
+  4     for row in (select name from instructor where dept_name = dname)
+  5     loop
+  6             dbms_output.put_line(row.name);
+  7     end loop;
+  8     dbms_output.put_line('Courses in department '||dname);
+  9     for row in (select title from course where dept_name = dname)
+ 10     loop
+ 11             dbms_output.put_line(row.title);
+ 12     end loop;
+ 13     end;
+ 14  /
+
+Procedure created.
+
+SQL> declare
+  2     begin
+  3     deptstuff('Comp. Sci.');
+  4     end;
+  5  /
+Instructors in department Comp. Sci.
+Bob
+Rob
+Mob
+Srinivasan
+Katz
+Brandt
+Courses in department Comp. Sci.
+Intro. to Computer Science
+Game Design
+Robotics
+Image Processing
+Database System Concepts
+
+PL/SQL procedure successfully completed.
+
+SQL>
+
+SQL> create or replace procedure course_popular(dname varchar) is
+  2     ccount number;
+  3     begin
+  4     select max(count(*)) into ccount from course c join takes t on c.course_id = t.course_id where c.dept_name = dname group by c.course_id;
+  5     for rec in (select c.course_id,c.title from course c join takes t on c.course_id = t.course_id where c.dept_name = dname group by c.course_id, c.title having count(t.id) = ccount)
+  6     loop
+  7     dbms_output.put_line('Department: '||dname||' Popular course: '||rec.title||' Count: '||ccount);
+  8  end loop;
+  9  end;
+ 10  /
+
+Procedure created.
+
+SQL> declare
+  2     begin
+  3     for d in (select dept_name from dept) loop
+  4             course_popular(d.dept_name);
+  5     end loop;
+  6     end;
+  7  /
+Department: Biology Popular course: Genetics Count: 1
+Department: Biology Popular course: Intro. to Biology Count: 1
+Department: Biology Popular course: Computational Biology Count: 1
+Department: Comp. Sci. Popular course: Intro. to Computer Science Count: 7
+Department: Elec. Eng. Popular course: Intro. to Digital Systems Count: 1
+Department: Finance Popular course: Investment Banking Count: 1
+Department: History Popular course: World History Count: 1
+Department: Music Popular course: Music Video Production Count: 1
+Department: Physics Popular course: Physical Principles Count: 1
+
+PL/SQL procedure successfully completed.
+
+SQL>
+
+SQL> create or replace procedure moredeptstuff(dname varchar) is
+  2  begin
+  3  dbms_output.put_line('students in department: '||dname);
+  4  for row in (select name from student where dept_name = dname) loop
+  5     dbms_output.put_line(row.name);
+  6  end loop;
+  7  dbms_output.put_line('courses in department: '||dname);
+  8  for row in (select title from course where dept_name = dname) loop
+  9     dbms_output.put_line(row.title);
+ 10  end loop;
+ 11  end;
+ 12  /
+
+Procedure created.
+
+SQL> declare
+  2  begin
+  3  moredeptstuff('Comp. Sci.');
+  4  end;
+  5  /
+students in department: Comp. Sci.
+Zhang
+Shankar
+Williams
+Brown
+courses in department: Comp. Sci.
+Intro. to Computer Science
+Game Design
+Robotics
+Image Processing
+Database System Concepts
+
+PL/SQL procedure successfully completed.
+
+SQL>
+
+SQL> create function square(a number)
+  2     return number as
+  3     sq number;
+  4     begin
+  5     sq := a*a;
+  6     return sq;
+  7     end;
+  8  /
+
+Function created.
+
+SQL> declare
+  2  begin
+  3  dbms_output.put_line(square(5));
+  4  end;
+  5  /
+25
+
+PL/SQL procedure successfully completed.
+
+SQL>
+
+SQL> create or replace function department_highest(dname varchar2)
+  2     return varchar as
+  3     iname instructor.name%TYPE;
+  4     begin
+  5     select name into iname from instructor where dept_name = dname and salary = (select max(salary) from instructor where dept_name = dname);
+  6     return iname;
+  7     end;
+  8  /
+
+Function created.
+SQL> declare
+  2  begin
+  3      for d in (select dept_name from dept) loop
+  4             dbms_output.put_line('Department '||d.dept_name||' highest paid: '||department_highest(d.dept_name));
+  5  end loop;
+  6  end;
+  7  /
+Department Biology highest paid: Crick
+Department Comp. Sci. highest paid: Brandt
+Department Elec. Eng. highest paid: Kim
+Department Finance highest paid: Wu
+Department History highest paid: Califieri
+Department Mechanical highest paid: William
+Department Music highest paid: Mozart
+Department Physics highest paid: Einstein
+
+PL/SQL procedure successfully completed.
+
+SQL>
+
+SQL> create or replace package deptpkg as
+  2     procedure list_instructors(dname varchar);
+  3     function maxsal(dname varchar)
+  4             return number;
+  5     end deptpkg;
+  6  /
+
+Package created.
+SQL> create or replace package body deptpkg as
+  2     procedure list_instructors(dname varchar) is
+  3     begin
+  4     dbms_output.put_line('instructors in department '||dname);
+  5     for row in (select name from instructor where dept_name = dname) loop
+  6     dbms_output.put_line(row.name);
+  7     end loop;
+  8     end list_instructors;
+  9
+ 10     function maxsal(dname varchar) return number is
+ 11             smax number;
+ 12     begin
+ 13     select max(salary) into smax from instructor where dept_name = dname;
+ 14     return smax;
+ 15     end maxsal;
+ 16  end deptpkg;
+ 17  /
+
+SQL> declare
+  2     msal number;
+  3  begin
+  4     deptpkg.list_instructors('Comp. Sci.');
+  5     msal := deptpkg.maxsal('Comp. Sci.');
+  6     dbms_output.put_line('Comp Sci max sal: '||msal);
+  7  end;
+  8  /
+instructors in department Comp. Sci.
+Bob
+Rob
+Mob
+Srinivasan
+Katz
+Brandt
+Comp Sci max sal: 92000
+
+PL/SQL procedure successfully completed.
+
+SQL>
+
+SQL> create or replace procedure interest(p in number, r in number, t in number,s out number, c out number,total in out number) is
+  2  begin
+  3  s := (p*r*t)/100;
+  4  c := p*(power((1+r/100),t)-1);
+  5  total := total+s+c;
+  6  end;
+  7  /
+
+Procedure created.
+
+SQL> declare
+  2  s number;
+  3  c number;
+  4  total number := 0;
+  5  begin
+  6  interest(10000,8,3,s,c,total);
+  7  dbms_output.put_line('Simple Interest: '||s);
+  8  dbms_output.put_line('Compound Interest: '||c);
+  9  dbms_output.put_line('totalsum: '||total);
+ 10  end;
+ 11  /
+Simple Interest: 2400
+Compound Interest: 2597.12
+totalsum: 4997.12
+
+PL/SQL procedure successfully completed.
+
+SQL>
